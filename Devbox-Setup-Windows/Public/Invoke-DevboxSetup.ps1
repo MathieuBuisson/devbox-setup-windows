@@ -22,6 +22,10 @@ Function Invoke-DevboxSetup {
             Install-ChocolateyPackage -Name $Package
         }
 
+        Foreach ( $Extension in $Config.VsCodeExtensions ) {
+            Install-VsCodeExtension -Name $Extension
+        }
+
     }
     End {
         Write-ConsoleLog 'Setup complete.'
