@@ -8,7 +8,8 @@
         'vscode',
         'conemu',
         'poshgit',
-        'Git-Credential-Manager-for-Windows'
+        'Git-Credential-Manager-for-Windows',
+        'azure-cli'
     )
     VsCodeExtensions = @(
         'ms-vscode.powershell',
