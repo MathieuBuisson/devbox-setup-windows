@@ -29,7 +29,12 @@ Function Invoke-DevboxSetup {
         # Copy Visual Studio Code user settings
         Copy-VsCodeUserSettings
 
-        # Install
+        # Install staple PowerShell modules
+        Install-PackageProvider -Name NuGet -Force -Scope AllUsers
+        Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+        Foreach ( $ModuleName in $Config.PowerShellModules ) {
+            Install-PowerShellModule -Name $ModuleName
+        }
     }
     End {
         Write-ConsoleLog 'Setup complete.'

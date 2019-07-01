@@ -19,4 +19,10 @@
         'mauve.terraform',
         'ms-azure-devops.azure-pipelines'
     )
+    PowerShellModules = @(
+        'Pester',
+        'posh-git',
+        'PSScriptAnalyzer',
+        'Az'
+    )
 }
