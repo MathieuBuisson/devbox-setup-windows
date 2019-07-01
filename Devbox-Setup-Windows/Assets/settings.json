@@ -6,6 +6,7 @@
     // Controls whether the editor should render indent guides
     "editor.renderIndentGuides": true,
 
+    "editor.formatOnPaste": true,
     "editor.smoothScrolling": true,
     "editor.cursorBlinking": "phase",
     "editor.cursorSmoothCaretAnimation": true,
@@ -21,9 +22,10 @@
 
     // Automatically update extensions
     "extensions.autoUpdate": true,
-    
+
     // Controls whether unsaved files are remembered between sessions, allowing the save prompt when exiting the editor to be skipped.
     "files.hotExit": "off",
+    "files.trimTrailingWhitespace": true,
 
     // Controls the font size of the terminal, this defaults to editor.fontSize's value.
     "terminal.integrated.fontSize": 14,

@@ -28,6 +28,8 @@ Function Invoke-DevboxSetup {
 
         # Copy Visual Studio Code user settings
         Copy-VsCodeUserSettings
+
+        # Install
     }
     End {
         Write-ConsoleLog 'Setup complete.'
