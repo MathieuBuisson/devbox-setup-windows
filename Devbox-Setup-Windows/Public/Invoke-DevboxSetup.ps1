@@ -26,6 +26,8 @@ Function Invoke-DevboxSetup {
             Install-VsCodeExtension -Name $Extension
         }
 
+        # Copy Visual Studio Code user settings
+        Copy-VsCodeUserSettings
     }
     End {
         Write-ConsoleLog 'Setup complete.'
