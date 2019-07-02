@@ -70,3 +70,5 @@ function gp {
     # Pass in the branch name
     & git push origin $args
 }
+
+Set-Location -Path 'C:\git'

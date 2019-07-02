@@ -35,6 +35,14 @@ Function Invoke-DevboxSetup {
         Foreach ( $ModuleName in $Config.PowerShellModules ) {
             Install-PowerShellModule -Name $ModuleName
         }
+
+        $GitReposPath = 'C:\git'
+        If ( -not(Test-Path -Path $GitReposPath) ) {
+            New-Item -Path $GitReposPath -ItemType Directory -Force
+        }
+
+        # Copy user-scoped PowerShell profile
+        Copy-PowerShellProfile
     }
     End {
         Write-ConsoleLog 'Setup complete.'
