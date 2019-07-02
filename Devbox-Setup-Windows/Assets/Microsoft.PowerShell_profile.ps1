@@ -1,60 +1,47 @@
 Import-Module -Name 'PSReadline'
-
-function prompt {
-    $origLastExitCode = $LastExitCode
-    $curPath = $ExecutionContext.SessionState.Path.CurrentLocation.Path
-    if ($curPath.ToLower().StartsWith($Home.ToLower())) {
-        $curPath = "~" + $curPath.SubString($Home.Length)
-    }
-    Write-Host $curPath -NoNewline -ForegroundColor Black -BackgroundColor DarkGreen
-    Write-Host "$([char]57520) " -NoNewline -ForegroundColor DarkGreen
-
-    Write-VcsStatus
-    "`n$('>' * ($nestedPromptLevel + 1)) "
-    $LastExitCode = $origLastExitCode
-}
-
 Import-Module -Name 'posh-git'
 
-# Background colors
-$baseBackgroundColor = 'DarkBlue'
-$GitPromptSettings.AfterStashBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.BeforeBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.BeforeIndexBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.BeforeStashBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.BranchAheadStatusBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.BranchBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.BranchBehindAndAheadStatusBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.BranchBehindStatusBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.BranchGoneStatusBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.BranchIdenticalStatusToBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.DelimBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.IndexBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.ErrorBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.LocalDefaultStatusBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.LocalStagedStatusBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.LocalWorkingStatusBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.StashBackgroundColor = $baseBackgroundColor
-$GitPromptSettings.WorkingBackgroundColor = $baseBackgroundColor
+function Prompt {
 
-# Foreground colors
-$GitPromptSettings.AfterForegroundColor = $baseBackgroundColor
-$GitPromptSettings.BeforeForegroundColor = "Black"
-$GitPromptSettings.BranchForegroundColor = "Blue"
-$GitPromptSettings.BranchGoneStatusForegroundColor = "Blue"
-$GitPromptSettings.BranchIdenticalStatusToForegroundColor = "DarkYellow"
-$GitPromptSettings.DefaultForegroundColor = "Gray"
-$GitPromptSettings.DelimForegroundColor = "Blue"
-$GitPromptSettings.IndexForegroundColor = "Green"
+    Try {
+        $history = Get-History -ErrorAction Ignore -Count 1
+        If ($history) {
+            Write-Host "[" -NoNewline -ForegroundColor Black -BackgroundColor DarkGreen
+            $ts = New-TimeSpan $history.StartExecutionTime $history.EndExecutionTime
+            Switch ($ts) {
+                {$_.TotalSeconds -lt 1} {
+                    [int]$d = $_.TotalMilliseconds
+                    '{0}ms' -f ($d) | Write-Host -NoNewline -ForegroundColor Black -BackgroundColor DarkGreen
+                    break
+                }
+                {$_.totalminutes -lt 1} {
+                    [int]$d = $_.TotalSeconds
+                    '{0}s' -f ($d) | Write-Host -NoNewline -ForegroundColor Black -BackgroundColor DarkGreen
+                    break
+                }
+                {$_.totalminutes -ge 1} {
+                    "{0:HH:mm:ss}" -f ([datetime]$ts.Ticks) | Write-Host -NoNewline
+                    break
+                }
+            }
+            Write-Host "]" -NoNewline -ForegroundColor Black -BackgroundColor DarkGreen
+        }
 
-# Prompt shape
-$GitPromptSettings.BeforeText = "$([char]57520)"
-$GitPromptSettings.AfterText = "$([char]57520) "
-$GitPromptSettings.DelimText = " ॥"
-$GitPromptSettings.ShowStatusWhenZero = $False
+        $SplitPath = $PWD.Path.Split('\')
+        $PathToWrite = If ($SplitPath.Count -gt 3) {' {0}\...\{1}\{2}' -f $SplitPath[0], $SplitPath[-2], $SplitPath[-1]} Else {" $($PWD.Path)"}
+
+        Write-Host $PathToWrite -NoNewline
+
+        If (Get-Module -Name 'posh-git') {
+            Write-VcsStatus
+        }
+    }
+    Catch { }
+
+    "`n$('>' * ($nestedPromptLevel + 1)) "
+}
 
 # Aliases for common git commands
-
 function ga {
     & git add --all
 }
