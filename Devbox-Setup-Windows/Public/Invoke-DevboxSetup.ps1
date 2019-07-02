@@ -43,6 +43,9 @@ Function Invoke-DevboxSetup {
 
         # Copy user-scoped PowerShell profile
         Copy-PowerShellProfile
+
+        # Copy ConEmu settings
+        Copy-ConEmuSettings
     }
     End {
         Write-ConsoleLog 'Setup complete.'
