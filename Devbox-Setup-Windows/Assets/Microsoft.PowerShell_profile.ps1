@@ -20,7 +20,7 @@ function Prompt {
                     break
                 }
                 {$_.totalminutes -ge 1} {
-                    "{0:HH:mm:ss}" -f ([datetime]$ts.Ticks) | Write-Host -NoNewline
+                    "{0:HH:mm:ss}" -f ([datetime]$ts.Ticks) | Write-Host -NoNewline -ForegroundColor Black -BackgroundColor DarkGreen
                     break
                 }
             }
